@@ -1,22 +1,129 @@
 {
   "name": "json-typescript-mapper",
-  "version": "1.3.1",
-  "typescript": {
-    "definition": "index.d.ts"
-  },
+  "version": "2.0.0",
+  "main": "lib/index.js",
+  "types": "typings/index.d.ts",
+  "files": ["lib/**/*", "typings/**/*"],
   "dependencies": {
     "reflect-metadata": "^0.1.3"
   },
   "devDependencies": {
-    "chai": "~1.8.0",
-    "mocha": "2.0.1"
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/plugin-proposal-decorators": "^7.4.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/preset-typescript": "^7.3.3",
+    "@types/jest": "^24.0.11",
+    "@typescript-eslint/eslint-plugin": "^1.7.0",
+    "@typescript-eslint/parser": "^1.7.0",
+    "eslint": "^5.16.0",
+    "jest": "^24.7.1",
+    "ts-node": "^8.1.0",
+    "typescript": "^3.4.5"
   },
   "scripts": {
-    "test": "mocha ./spec/*.js",
-    "typings:generate": "tsc --declaration"
+    "test": "jest --verbose=false",
+    "lint": "eslint src/**/* && tsc --noEmit",
+    "build": "npm run build:types && npm run build:js",
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/env",
+        {
+          "useBuiltIns": "entry",
+          "corejs": "3"
+        }
+      ],
+      "@babel/typescript"
+    ],
+    "plugins": [
+      [
+        "@babel/plugin-proposal-decorators",
+        {
+          "legacy": true
+        }
+      ],
+      [
+        "@babel/proposal-class-properties",
+        {
+          "loose": true
+        }
+      ],
+      "@babel/proposal-object-rest-spread"
+    ],
+    "sourceMaps": "inline"
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>/test"
+    ],
+    "testRegex": "(/test/.*|(\\.|/)(test|spec))\\.(tsx?)$",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/common/"
+    ],
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "collectCoverageFrom": [
+      "!<rootDir>/src/util/**/*",
+      "<rootDir>/src/**/*.{ts,tsx}"
+    ]
+  },
+  "eslintConfig": {
+    "env": {
+      "node": true,
+      "es6": true,
+      "jest": true
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    },
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "rules": {
+      "semi": [
+        "error",
+        "always"
+      ],
+      "@typescript-eslint/indent": [
+        "error",
+        2
+      ],
+      "@typescript-eslint/no-explicit-any": 0,
+      "@typescript-eslint/array-type": [
+        "error",
+        "array-simple"
+      ],
+      "@typescript-eslint/explicit-function-return-type": [
+        "error",
+        {
+          "allowExpressions": true
+        }
+      ],
+      "@typescript-eslint/no-use-before-define": [
+        "error",
+        {
+          "functions": false
+        }
+      ],
+      "@typescript-eslint/interface-name-prefix": 0,
+      "@typescript-eslint/no-parameter-properties": 0
+    }
   },
   "description": "For single page application, data sources are obtained from API server. Instead of directly using api data, we \r definitely require an adapter layer to transform data as needed. Furthermore, \r the adapter inverse the the data dependency from API server(API Server is considered uncontrollable and \r highly unreliable as data structure may be edit by backend coder for some specific purposes)to our adapter \r which becomes reliable. Thus, this library is created as the adapter make use of es7 reflect decorator.",
-  "main": "index.js",
   "keywords": [
     "json-mapper",
     "typescript-json",
@@ -25,10 +132,10 @@
     "api-mapper",
     "api-adapter"
   ],
-  "author": "Ailun She, Brian Choi",
+  "author": "Ailun She, Brian Choi, David Katz",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jf3096/json-typescript-mapper/issues"
+    "url": "https://github.com/dhkatz/json-typescript-mapper/issues"
   },
-  "homepage": "https://github.com/jf3096/json-typescript-mapper#readme"
+  "homepage": "https://github.com/dhkatz/json-typescript-mapper#readme"
 }
