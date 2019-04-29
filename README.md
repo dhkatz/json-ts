@@ -1,27 +1,17 @@
 # json-typescript-mapper
 
-## Introduction
+[![Build Status](https://travis-ci.com/dhkatz/json-typescript-mapper.svg?branch=master)](https://travis-ci.com/dhkatz/json-typescript-mapper)
 
-For single page application, data sources are obtained from API server. Instead of directly using api data, we 
-definitely require an adapter layer to transform data as needed. Furthermore, 
-the adapter inverse the the data dependency from API server(API Server is considered uncontrollable and 
-highly unreliable as data structure may be edit by backend coder for some specific purposes)to our adapter 
-which becomes reliable. Thus, this library is created as the adapter.
+(De)serialize between JSON and JavaScript objects using the decorators design proposal.
 
-### Get Started
+## Installation
 ```bash
-npm install json-typescript-mapper --save
+npm install dhkatz/json-typescript-mapper
 ```
-## Environment
-* NodeJS
-* Browser
 
-## Language
-* Typescript
+## Usage
 
-### Typescript
-
-```bash
+```typescript
 import {deserialize} from 'json-typescript-mapper';
 
 deserialize(<Class Type>, <JSON Object>);
@@ -29,28 +19,35 @@ serialize(<Object>);
 ```
 
 ## Example 
-Here is a complex example, hopefully could give you an idea of how to use it (for more on how to use, checkout /spec which are unit test cases):
+Here is a complex example, hopefully could give you an idea of how to use it (for more on how to use, checkout [/test] which are unit test cases).
+
+Note that initializing the class properties to defaults (such as undefined) is necessary because of how TypeScript compilation works.
+
+Properties that are not initialized are not listed as actual class keys in the JavaScript output.
 
 ```typescript
 class Student {
     @JsonProperty('name')
-    fullName:string;
+    public fullName:string;
 
-    constructor() {
+    public constructor() {
         this.fullName = undefined;
     }
 }
 
 class Address {
     @JsonProperty('first-line')
-    firstLine:string;
-    @JsonProperty('second-line')
-    secondLine:string;
-    @JsonProperty({clazz: Student})
-    student:Student;
-    city:string;
+    public firstLine:string;
 
-    constructor() {
+    @JsonProperty('second-line')
+    public secondLine:string;
+
+    @JsonProperty({clazz: Student})
+    public student:Student;
+
+    public city:string;
+
+    public constructor() {
         this.firstLine = undefined;
         this.secondLine = undefined;
         this.city = undefined;
@@ -60,28 +57,32 @@ class Address {
 
 class Person {
     @JsonProperty('Name')
-    name:string;
-    @JsonProperty('xing')
-    surname:string;
-    age:number;
-    @JsonProperty({clazz: Address, name: 'AddressArr'})
-    addressArr:Address[];
-    @JsonProperty({clazz: Address, name: 'Address'})
-    address:Address;
+    public name:string;
 
-    constructor() {
-        this.name = void 0;
-        this.surname = void 0;
-        this.age = void 0;
-        this.addressArr = void 0;
-        this.address = void 0;
+    @JsonProperty('xing')
+    public surname:string;
+
+    public age:number;
+
+    @JsonProperty({clazz: Address, name: 'AddressArr'})
+    public addressArr:Address[];
+
+    @JsonProperty({clazz: Address, name: 'Address'})
+    public address:Address;
+
+    public constructor() {
+        this.name = undefined;
+        this.surname = undefined;
+        this.age = undefined;
+        this.addressArr = undefined;
+        this.address = undefined;
     }
 }
 ```
 
 Now here is what API server return, assume it is already parsed to JSON object.
 ```typescript
-let json = {
+const json = {
   "Name": "Mark",
   "xing": "Galea",
   "age": 30,
@@ -91,7 +92,7 @@ let json = {
           "second-line": "Over Here",
           "city": "In This City",
           "student": {
-              name1: "Ailun"
+              "name": "Ailun"
           }
       },
       {
@@ -99,7 +100,7 @@ let json = {
           "second-line": "Over Here",
           "city": "In This City",
           "student": {
-              name1: "Ailun"
+              "name": "Ailun"
           }
       }
   ],
@@ -108,7 +109,7 @@ let json = {
       "second-line": "Over Here",
       "city": "In This City",
       "student": {
-          name: "Ailun"
+          "name": "Ailun"
       }
   }
 ```
@@ -116,7 +117,7 @@ let json = {
 Simply, just map it use following code. The mapping is based on <@JsonProperty> decorator meta data.
 
 ```typescript
-const person = deserialize(Person, json);
+const person: Person = deserialize(Person, json);
 ```
 
 If you want to reverse the action, from the other way round:
@@ -132,32 +133,8 @@ This is essential to enable decorator support for your typescript program. Examp
 ```json
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "es5",
-    "sourceMap": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
-  },
-  "exclude": [
-    "node_modules"
-  ]
+  }
 }
 ```
-## Test Report
-The test case will be covered in the next push. This caused by inconsistent return type.
-![alt tag](/git-img/Test Results — spec_index.ts.png)
-
-## Fixed
-1) Fixed test cases. According to typescript official website tips [NULL IS BAD](https://basarat.gitbooks.io/typescript/content/docs/tips/null.html), 
-therefore I updated all null value to void 0 which is a better expression than undefined (idea from underscore source code). 
-Most cases it won't affect previous version at all.
-
-## Contributor
-[@dankmo](https://github.com/dankmo)
-
-## ChangeLog
-#### 2017-02-20
-
-**json-typescript-mapper** 1.1.1
-- Added serialized function
-- Passed more unit tests
