@@ -1,6 +1,6 @@
 {
   "name": "json-typescript-mapper",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "main": "lib/index.js",
   "types": "typings/index.d.ts",
   "files": ["lib/**/*", "typings/**/*"],

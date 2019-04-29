@@ -32,12 +32,12 @@ export interface ICustomConverter<T> {
 * DecoratorConstraint
 *
 * @interface
-* @property {ICustomConverter} customConverter, will be used for mapping the property, if specified
-* @property {boolean} excludeToJson, will exclude the property for serialization, if true
+* @property {ICustomConverter} converter, Used for mapping the property, if specified
+* @property {boolean} exclude, Exclude the property for serialization
 */
 export interface IDecoratorMetaData<T> {
   name?: string;
-  type?: { new(): T };
+  type?: { new (...args: any[]): T };
   converter?: ICustomConverter<T>;
   exclude?: boolean;
 }
@@ -51,7 +51,7 @@ export interface IDecoratorMetaData<T> {
 * @property {string} type, if the target is not primitive type, map it to corresponding class
 */
 export class DecoratorMetaData<T> implements IDecoratorMetaData<T> {
-  public constructor(public name: string, public type?: { new(): T }) {
+  public constructor(public name: string, public type?: { new (...args: any[]): T }) {
   }
 }
 
@@ -118,8 +118,8 @@ function deserializeProp<T>(metadata: IDecoratorMetaData<any>, instance: T, json
 *
 * @return {T} return mapped object
 */
-export function deserialize<T, U extends JSONObject | JSONArray = JSONObject>(type: { new(): T }, json: U): U extends JSONObject ? T : T[];
-export function deserialize<T>(type: { new(): T }, json: JSONObject | JSONArray): T | T[] {
+export function deserialize<T, U extends JSONObject | JSONArray = JSONObject>(type: { new (...args: any[]): T }, json: U, ...args: any[]): U extends JSONObject ? T : T[];
+export function deserialize<T>(type: { new (...args: any[]): T }, json: JSONObject | JSONArray, ...args: any[]): T | T[] {
   if (type == undefined || json == undefined) {
     return undefined;
   }
@@ -132,12 +132,12 @@ export function deserialize<T>(type: { new(): T }, json: JSONObject | JSONArray)
     return json.map((value: JSONObject) => deserialize(type, value));
   }
 
-  const instance = new type();
+  const instance = args.length > 0 ? new type(...args) : new type();
   
   Object.keys(instance).forEach((key: string) => {
     const metadata: IDecoratorMetaData<T> = Reflect.getMetadata(METADATA_KEY, instance, key);
 
-    const value = metadata ? metadata.converter ? metadata.converter.fromJson(json[metadata.name || key]) : deserializeProp(metadata, instance, json, key) : json[key];
+    const value = metadata ? metadata.converter ? metadata.converter.fromJson(json[metadata.name || key]) : deserializeProp(metadata, instance, json, key) : json[key] || instance[key];
 
     instance[key] = value;    
   });

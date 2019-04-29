@@ -49,8 +49,12 @@ class Person {
 
   @JsonProperty({ type: Address, name: 'Address' })
   public address: Address;
+
+  public client: { ass: string };
   
-  public constructor() {
+  public constructor(client?: { ass: string }) {
+    this.client = client;
+
     this.name = undefined;
     this.surname = undefined;
     this.age = undefined;
@@ -68,7 +72,8 @@ describe('index()', () => {
       "AddressArr": [],
       "Address": null
     };
-    const person = deserialize(Person, json);
+    const person = deserialize(Person, json, { ass: 'succ '});
+    expect(person.client).toBeDefined();
     expect(person.address).toBeUndefined();
     expect(person.name).toEqual("Mark");
     expect(person.surname).toEqual("Galea");
