@@ -19,13 +19,13 @@ export interface ICustomConverter<T> {
 * DecoratorConstraint
 *
 * @interface
-* @property {ICustomConverter} customConverter, will be used for mapping the property, if specified
-* @property {boolean} excludeToJson, will exclude the property for serialization, if true
+* @property {ICustomConverter} converter, Used for mapping the property, if specified
+* @property {boolean} exclude, Exclude the property for serialization
 */
 export interface IDecoratorMetaData<T> {
     name?: string;
     type?: {
-        new (): T;
+        new (...args: any[]): T;
     };
     converter?: ICustomConverter<T>;
     exclude?: boolean;
@@ -41,10 +41,10 @@ export interface IDecoratorMetaData<T> {
 export declare class DecoratorMetaData<T> implements IDecoratorMetaData<T> {
     name: string;
     type?: {
-        new (): T;
+        new (...args: any[]): T;
     };
     constructor(name: string, type?: {
-        new (): T;
+        new (...args: any[]): T;
     });
 }
 /**
@@ -65,8 +65,8 @@ export declare function JsonProperty<T>(metadata?: IDecoratorMetaData<T> | strin
 * @return {T} return mapped object
 */
 export declare function deserialize<T, U extends JSONObject | JSONArray = JSONObject>(type: {
-    new (): T;
-}, json: U): U extends JSONObject ? T : T[];
+    new (...args: any[]): T;
+}, json: U, ...args: any[]): U extends JSONObject ? T : T[];
 /**
 * Serialize: Creates a JSON serializable object from the provided object instance.
 * Only @JsonProperty decorated properties in the model instance are processed.
