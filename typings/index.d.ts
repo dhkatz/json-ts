@@ -64,7 +64,7 @@ export declare function JsonProperty<T>(metadata?: IDecoratorMetaData<T> | strin
 *
 * @return {T} return mapped object
 */
-export declare function deserialize<T, U extends JSONObject | JSONArray>(type: {
+export declare function deserialize<T, U extends JSONObject | JSONArray = JSONObject>(type: {
     new (): T;
 }, json: U): U extends JSONObject ? T : T[];
 /**

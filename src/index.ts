@@ -118,7 +118,7 @@ function deserializeProp<T>(metadata: IDecoratorMetaData<any>, instance: T, json
 *
 * @return {T} return mapped object
 */
-export function deserialize<T, U extends JSONObject | JSONArray>(type: { new(): T }, json: U): U extends JSONObject ? T : T[];
+export function deserialize<T, U extends JSONObject | JSONArray = JSONObject>(type: { new(): T }, json: U): U extends JSONObject ? T : T[];
 export function deserialize<T>(type: { new(): T }, json: JSONObject | JSONArray): T | T[] {
   if (type == undefined || json == undefined) {
     return undefined;
