@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     /* Module/Target Options */
-    "target": "esnext",
+    "target": "es2015",
     "module": "commonjs",
 
     "declaration": true,
@@ -24,7 +24,7 @@
     "esModuleInterop": true,
 
     "rootDir": "./src",
-    "baseUrl": ".",
+    "baseUrl": "."
   },
   "include": [
     "src"
@@ -32,5 +32,6 @@
   "exclude": [
     "lib/**",
     "node_modules/**",
+    "test/**"
   ]
 }
