@@ -1,4 +1,4 @@
-import { IDecoratorMetaData, METADATA_KEY } from './metadata'
+import { IDecoratorMetaData, METADATA_KEY } from './metadata';
 
 /**
  * Serialize: Creates a JSON serializable object from the provided object instance.

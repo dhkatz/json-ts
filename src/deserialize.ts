@@ -1,5 +1,5 @@
-import { IDecoratorMetaData, METADATA_KEY } from './metadata'
-import { isPrimitive, Json } from './util'
+import { IDecoratorMetaData, METADATA_KEY } from './metadata';
+import { isPrimitive, Json } from './util';
 
 /**
  * deserialize

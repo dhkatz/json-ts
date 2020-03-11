@@ -1,5 +1,5 @@
-import 'reflect-metadata'
-import { DecoratorMetaData, IDecoratorMetaData, METADATA_KEY } from './metadata'
+import 'reflect-metadata';
+import { DecoratorMetaData, IDecoratorMetaData, METADATA_KEY } from './metadata';
 
 /**
 * JsonProperty
