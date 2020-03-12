@@ -1,17 +1,19 @@
 import { IDecoratorMetaData, METADATA_KEY } from './metadata';
-import { isPrimitive, Json } from './util';
+import { Constructor, isPrimitive, Json, JsonArray, JsonObject } from './util';
 
 /**
  * deserialize
  *
  * @function
- * @param {{new():T}} type, class type which is going to initialize and hold a mapping json
- * @param {Object} json, input json object which to be mapped
+ * @param {Constructor} type, class type which is going to initialize and hold a mapping json
+ * @param {Json} json, input json object which to be mapped
  * @param args Extra arguments passed to the deserialized class constructor
  * @return {T} return mapped object
  */
-export function deserialize<T, U extends Json = Json>(type: { new (...args: any[]): T }, json: U, ...args: any[]): U extends Json ? T : T[];
-export function deserialize<T>(type: { new (...args: any[]): T }, json: Json, ...args: any[]): T | T[] {
+export function deserialize<T, U extends Json>(type: Constructor<T>, json: U, ...args: any[]): T;
+export function deserialize<T, U extends JsonArray>(type: Constructor<T>, json: U, ...args: any[]): T[];
+export function deserialize<T, U extends JsonObject>(type: Constructor<T>, json: U, ...args: any[]): T;
+export function deserialize<T>(type: Constructor<T>, json: JsonObject | JsonArray, ...args: any[]): T | T[] {
   if (type == undefined || json == undefined) {
     return undefined;
   }
@@ -43,11 +45,11 @@ export function deserialize<T>(type: { new (...args: any[]): T }, json: Json, ..
   return instance;
 }
 
-function deserializeProp<T>(metadata: IDecoratorMetaData<any>, instance: T, json: Json, key: string): any {
+function deserializeProp<T>(metadata: IDecoratorMetaData<T>, instance: T, json: Json, key: string): any {
   const index = metadata.name || key;
   const value: Json = json ? json[index] : null;
 
-  const options: IDecoratorMetaData<any> = Reflect.getMetadata(METADATA_KEY, instance, key);
+  const options: IDecoratorMetaData<T> = Reflect.getMetadata(METADATA_KEY, instance, key);
   const type: any = Reflect.getMetadata('design:type', instance, key) || options.type;
 
   if (type == undefined) {

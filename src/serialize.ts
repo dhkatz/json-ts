@@ -22,8 +22,8 @@ export function serialize<T extends object = any, U extends object = any>(instan
 
     if (metadata.exclude) {
       continue;
-    } else if (metadata.target) {
-      target = metadata.target;
+    } else if (metadata.targetKey) {
+      target = metadata.targetKey;
     } else if (metadata.name) {
       target = metadata.name;
     }

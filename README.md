@@ -12,10 +12,11 @@ npm install dhkatz/json-typescript-mapper
 ## Usage
 
 ```typescript
-import {deserialize} from 'json-typescript-mapper';
+import { deserialize, serialize } from 'json-typescript-mapper';
 
-deserialize(<Class Type>, <JSON Object>);
-serialize(<Object>);
+deserialize(<type>, <json>);
+
+serialize(<instance>);
 ```
 
 ## Example 
@@ -26,6 +27,8 @@ Note that initializing the class properties to defaults (such as undefined) is n
 Properties that are not initialized are not listed as actual class keys in the JavaScript output.
 
 ```typescript
+import { JsonProperty } from 'json-typescript-mapper';
+
 class Student {
     @JsonProperty('name')
     public fullName:string;
@@ -37,15 +40,15 @@ class Student {
 
 class Address {
     @JsonProperty('first-line')
-    public firstLine:string;
+    public firstLine: string;
 
     @JsonProperty('second-line')
-    public secondLine:string;
+    public secondLine: string;
 
     @JsonProperty({clazz: Student})
-    public student:Student;
+    public student: Student;
 
-    public city:string;
+    public city: string;
 
     public constructor() {
         this.firstLine = undefined;
@@ -64,10 +67,10 @@ class Person {
 
     public age:number;
 
-    @JsonProperty({clazz: Address, name: 'AddressArr'})
+    @JsonProperty({ type: Address, name: 'AddressArr' })
     public addressArr:Address[];
 
-    @JsonProperty({clazz: Address, name: 'Address'})
+    @JsonProperty({ type: Address, name: 'Address' })
     public address:Address;
 
     public constructor() {
@@ -110,19 +113,23 @@ const json = {
       "city": "In This City",
       "student": {
           "name": "Ailun"
-      }
   }
+};
 ```
 
 Simply, just map it use following code. The mapping is based on <@JsonProperty> decorator meta data.
 
 ```typescript
-const person: Person = deserialize(Person, json);
+import { deserialize } from 'json-typescript-mapper';
+
+const person = deserialize(Person, json);
 ```
 
 If you want to reverse the action, from the other way round:
 
 ```typescript
+import { serialize } from 'json-typescript-mapper';
+
 const json = serialize(person);
 ```
 

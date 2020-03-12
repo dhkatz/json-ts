@@ -1,3 +1,5 @@
+import { Constructor } from './util';
+
 /**
  * Decorator variable name
  *
@@ -25,10 +27,10 @@ export interface ICustomConverter<T> {
  */
 export interface IDecoratorMetaData<T> {
   name?: string;
-  type?: { new (...args: any[]): T };
+  type?: Constructor<T>;
   converter?: ICustomConverter<T>;
   exclude?: boolean;
-  target?: string;
+  targetKey?: string;
 }
 
 /**
