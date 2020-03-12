@@ -134,6 +134,9 @@ const json = serialize(person);
 ```
 
 ## Notice
+
+### Decorators
+
 Remember to add: <b>experimentalDecorators</b> and <b>emitDecoratorMetadata</b> in your tsconfig.json. 
 This is essential to enable decorator support for your typescript program. Example shown as followings:
 
@@ -142,6 +145,37 @@ This is essential to enable decorator support for your typescript program. Examp
   "compilerOptions": {
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
+  }
+}
+```
+
+### Property Initialization
+
+Properties that are not initialized to any value are also
+ not visible the Reflect library or this library!
+ 
+If you do not give a property a default value, at least set
+it to `undefined` inline or in the constructor.
+
+```typescript
+class User {
+  public name: string = ''; // Ok
+  // public name: string = undefined; // Also, ok
+
+  public constructor() {
+    this.name = ''; // Ok
+    // this.name = undefined; // Also ok
+  }
+}
+```
+ 
+Because of this I recommend also adding <b>strictPropertyInitialization</b> to
+tsconfig.json as well!
+
+```json
+{
+  "compilerOptions": {
+    "strictPropertyInitialization": true
   }
 }
 ```
