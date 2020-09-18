@@ -1,4 +1,4 @@
-# json-typescript-mapper
+# json-ts
 
 [![Build Status](https://travis-ci.com/dhkatz/json-typescript-mapper.svg?branch=master)](https://travis-ci.com/dhkatz/json-typescript-mapper)
 
@@ -6,13 +6,13 @@
 
 ## Installation
 ```bash
-npm install dhkatz/json-typescript-mapper
+npm install @dhkatz/json-ts
 ```
 
 ## Usage
 
 ```typescript
-import { deserialize, serialize } from 'json-typescript-mapper';
+import { deserialize, serialize } from '@dhkatz/json-ts';
 
 deserialize(<type>, <json>);
 
@@ -27,7 +27,7 @@ Note that initializing the class properties to defaults (such as undefined) is n
 Properties that are not initialized are not listed as actual class keys in the JavaScript output.
 
 ```typescript
-import { JsonProperty } from 'json-typescript-mapper';
+import { JsonProperty } from '@dhkatz/json-ts';
 
 class Student {
     @JsonProperty('name')
@@ -120,7 +120,7 @@ const json = {
 Simply, just map it use following code. The mapping is based on <@JsonProperty> decorator meta data.
 
 ```typescript
-import { deserialize } from 'json-typescript-mapper';
+import { deserialize } from '@dhkatz/json-ts';
 
 const person = deserialize(Person, json);
 ```
@@ -128,7 +128,7 @@ const person = deserialize(Person, json);
 If you want to reverse the action, from the other way round:
 
 ```typescript
-import { serialize } from 'json-typescript-mapper';
+import { serialize } from '@dhkatz/json-ts';
 
 const json = serialize(person);
 ```

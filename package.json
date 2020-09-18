@@ -1,6 +1,29 @@
 {
-  "name": "json-typescript-mapper",
-  "version": "3.0.1",
+  "name": "@dhkatz/json-ts",
+  "version": "3.1.1",
+  "description": "Transform JSON objects into TypeScript classes.",
+  "keywords": [
+    "json-mapper",
+    "typescript-json",
+    "json-adapter",
+    "json-transformer",
+    "api-mapper",
+    "api-adapter"
+  ],
+  "author": "Ailun She, Brian Choi, David Katz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dhkatz/json-ts/issues"
+  },
+  "homepage": "https://github.com/dhkatz/json-ts#readme",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dhkatz/json-ts.git"
+  },
   "main": "lib/index.js",
   "types": "typings/index.d.ts",
   "files": [
@@ -31,7 +54,8 @@
     "lint": "eslint src/**/* && tsc --noEmit",
     "build": "npm run build:types && npm run build:js",
     "build:types": "tsc --emitDeclarationOnly",
-    "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline"
+    "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
+    "prepublish": "npm run build"
   },
   "babel": {
     "presets": [
@@ -125,20 +149,5 @@
       "@typescript-eslint/interface-name-prefix": 0,
       "@typescript-eslint/no-parameter-properties": 0
     }
-  },
-  "description": "For single page application, data sources are obtained from API server. Instead of directly using api data, we \r definitely require an adapter layer to transform data as needed. Furthermore, \r the adapter inverse the the data dependency from API server(API Server is considered uncontrollable and \r highly unreliable as data structure may be edit by backend coder for some specific purposes)to our adapter \r which becomes reliable. Thus, this library is created as the adapter make use of es7 reflect decorator.",
-  "keywords": [
-    "json-mapper",
-    "typescript-json",
-    "json-adapter",
-    "json-transformer",
-    "api-mapper",
-    "api-adapter"
-  ],
-  "author": "Ailun She, Brian Choi, David Katz",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/dhkatz/json-typescript-mapper/issues"
-  },
-  "homepage": "https://github.com/dhkatz/json-typescript-mapper#readme"
+  }
 }
