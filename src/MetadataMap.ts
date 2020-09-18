@@ -60,8 +60,10 @@ export class MetadataMap<T = any> {
 
     const metadata = new Map<string, IPropertyMetadata<T>>();
 
-    for (const [prop, data] of this.metadata.get(key).entries()) {
-      metadata.set(prop, data);
+    if (this.metadata.has(key)) {
+      for (const [prop, data] of this.metadata.get(key).entries()) {
+        metadata.set(prop, data);
+      }
     }
 
     for (const ancestor of this._ancestors(key)) {
