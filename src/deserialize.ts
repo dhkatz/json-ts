@@ -49,7 +49,7 @@ function deserializeProp<T>(metadata: IPropertyMetadata<T>, instance: T, json: J
   const type: any = metadata.type || Reflect.getMetadata('design:type', instance, key);
 
   if (type == undefined) {
-    return json[index];
+    return value;
   }
 
   if (Array.isArray(type) || type === Array) {
@@ -68,12 +68,14 @@ function deserializeProp<T>(metadata: IPropertyMetadata<T>, instance: T, json: J
   }
 
   if (type === Boolean) {
-    if (json[index] === undefined) {
+    if (value === undefined) {
       return undefined;
     }
 
-    return Boolean(json[index]);
+    return Boolean(value);
+  } else if (isPrimitive(type) && type instanceof Function) {
+    return type(value);
   }
 
-  return json[index];
+  return value;
 }
