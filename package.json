@@ -1,6 +1,6 @@
 {
   "name": "@dhkatz/json-ts",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "description": "Transform JSON objects into TypeScript classes.",
   "keywords": [
     "json-mapper",
@@ -28,7 +28,8 @@
   "types": "typings/src/index.d.ts",
   "files": [
     "lib/**/*",
-    "typings/**/*"
+    "typings/**/*",
+    "src/**/*"
   ],
   "dependencies": {
     "reflect-metadata": "^0.1.3"

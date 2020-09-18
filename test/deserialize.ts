@@ -2,7 +2,7 @@ import { deserialize } from '../src';
 import { Student } from './common/Student';
 import { Person } from './common/Person';
 import { Address } from './common/Address';
-import { Dog } from './common/Animal';
+import { Cat, Dog } from './common/Animal';
 
 describe('index()', () => {
   it('simple json object #1', () => {
@@ -144,5 +144,13 @@ describe('index()', () => {
     const dog = deserialize(Dog, json);
     expect(dog.name).toEqual('Max');
     expect(dog.breed).toEqual('Beagle');
+  });
+
+  it('deserializes classes with mixins', () => {
+    const json = { coat: 1 };
+
+    const cat = deserialize(Cat, json);
+    expect(cat.coat).toEqual(1);
+    expect(cat.meow()).toEqual('Meow!');
   });
 });
