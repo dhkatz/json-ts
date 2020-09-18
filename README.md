@@ -1,6 +1,6 @@
 # json-ts
 
-[![Build Status](https://travis-ci.com/dhkatz/json-typescript-mapper.svg?branch=master)](https://travis-ci.com/dhkatz/json-typescript-mapper)
+[![Build Status](https://travis-ci.com/dhkatz/json-ts.svg?branch=master)](https://travis-ci.com/dhkatz/json-ts)
 
 (De)serialize between JSON and JavaScript objects using the decorators design proposal.
 
