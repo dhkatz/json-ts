@@ -1,6 +1,6 @@
 # json-ts
 
-[![Build Status](https://travis-ci.com/dhkatz/json-ts.svg?branch=master)](https://travis-ci.com/dhkatz/json-ts)
+[![Build Status](https://travis-ci.com/dhkatz/json-typescript-mapper.svg?branch=master)](https://travis-ci.com/dhkatz/json-typescript-mapper)
 
 (De)serialize between JSON and JavaScript objects using the decorators design proposal.
 
@@ -32,10 +32,6 @@ import { JsonProperty } from '@dhkatz/json-ts';
 class Student {
     @JsonProperty('name')
     public fullName:string;
-
-    public constructor() {
-        this.fullName = undefined;
-    }
 }
 
 class Address {
@@ -49,13 +45,6 @@ class Address {
     public student: Student;
 
     public city: string;
-
-    public constructor() {
-        this.firstLine = undefined;
-        this.secondLine = undefined;
-        this.city = undefined;
-        this.student = undefined
-    }
 }
 
 class Person {
@@ -72,14 +61,6 @@ class Person {
 
     @JsonProperty({ type: Address, name: 'Address' })
     public address:Address;
-
-    public constructor() {
-        this.name = undefined;
-        this.surname = undefined;
-        this.age = undefined;
-        this.addressArr = undefined;
-        this.address = undefined;
-    }
 }
 ```
 
@@ -145,37 +126,6 @@ This is essential to enable decorator support for your typescript program. Examp
   "compilerOptions": {
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
-  }
-}
-```
-
-### Property Initialization
-
-Properties that are not initialized to any value are also
- not visible the Reflect library or this library!
- 
-If you do not give a property a default value, at least set
-it to `undefined` inline or in the constructor.
-
-```typescript
-class User {
-  public name: string = ''; // Ok
-  // public name: string = undefined; // Also, ok
-
-  public constructor() {
-    this.name = ''; // Ok
-    // this.name = undefined; // Also ok
-  }
-}
-```
- 
-Because of this I recommend also adding <b>strictPropertyInitialization</b> to
-tsconfig.json as well!
-
-```json
-{
-  "compilerOptions": {
-    "strictPropertyInitialization": true
   }
 }
 ```

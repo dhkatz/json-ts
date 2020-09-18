@@ -1,5 +1,5 @@
 import { serialize, JsonProperty } from '../src';
-import { DateConverter } from './common/dateconverter';
+import { DateConverter } from './common/DateConverter';
 
 describe('serialize', () => {
   it('should use the property name given in the meta data', () => {

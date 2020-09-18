@@ -1,4 +1,5 @@
-import { IDecoratorMetaData, METADATA_KEY } from './metadata';
+import { IPropertyMetadata } from './PropertyMetadata';
+import { PropertyMetadataMap } from './index';
 
 /**
  * Serialize: Creates a JSON serializable object from the provided object instance.
@@ -14,7 +15,7 @@ export function serialize<T extends object = any, U extends object = any>(instan
   const obj: U = Object.create(null);
 
   for (const key of Object.keys(instance)) {
-    const metadata: IDecoratorMetaData<T> = Reflect.getMetadata(METADATA_KEY, instance, key);
+    const metadata = PropertyMetadataMap.find(instance.constructor, key);
 
     if (!metadata) continue;
 
@@ -41,7 +42,7 @@ export function serialize<T extends object = any, U extends object = any>(instan
  * @param prop
  * @returns {any}
  */
-function serializeProperty(metadata: IDecoratorMetaData<any>, prop: any): any {
+function serializeProperty(metadata: IPropertyMetadata<any>, prop: any): any {
   if (typeof prop === 'undefined') return undefined;
 
   if (prop === null) return null;
@@ -51,7 +52,7 @@ function serializeProperty(metadata: IDecoratorMetaData<any>, prop: any): any {
   }
 
   if (!metadata.type) {
-    return prop instanceof Date ? new Date(prop.getTime() - (prop.getTimezoneOffset() * 60000)).toISOString() : prop;
+    return prop instanceof Date ? new Date(prop.getTime() - prop.getTimezoneOffset() * 60000).toISOString() : prop;
   }
 
   if (Array.isArray(prop)) {

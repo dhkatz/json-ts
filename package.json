@@ -1,6 +1,6 @@
 {
   "name": "@dhkatz/json-ts",
-  "version": "3.1.1",
+  "version": "4.0.0",
   "description": "Transform JSON objects into TypeScript classes.",
   "keywords": [
     "json-mapper",
@@ -103,6 +103,12 @@
       "<rootDir>/src/**/*.{ts,tsx}"
     ]
   },
+  "prettier": {
+    "singleQuote": true,
+    "tabWidth": 2,
+    "printWidth": 120,
+    "semi": true
+  },
   "eslintConfig": {
     "env": {
       "node": true,
@@ -125,6 +131,7 @@
         "error",
         "always"
       ],
+      "no-dupe-class-members": "off",
       "@typescript-eslint/indent": [
         "error",
         2
