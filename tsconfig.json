@@ -12,9 +12,6 @@
     /* Strict Type-Checking Options */
     "strict": true,
 
-    /* Basic Options */
-    "importHelpers": true,
-
     /* Extra Options */
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
