@@ -3,12 +3,12 @@ import { mixin } from './mixin';
 
 export class Animal {
   @JsonProperty('name')
-  public name: string;
+  public name!: string;
 }
 
 export class Dog extends Animal {
   @JsonProperty('breed')
-  public breed: string;
+  public breed!: string;
 }
 
 class Meows {
@@ -22,5 +22,5 @@ export interface Cat extends Animal, Meows {}
 @mixin(Meows)
 export class Cat extends Animal {
   @JsonProperty('coat')
-  public coat: number;
+  public coat!: number;
 }

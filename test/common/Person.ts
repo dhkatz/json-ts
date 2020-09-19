@@ -3,18 +3,18 @@ import { Address } from './Address';
 
 export class Person {
   @JsonProperty('Name')
-  public name: string;
+  public name!: string;
 
   @JsonProperty('xing')
-  public surname: string;
+  public surname!: string;
 
-  public age: number;
+  public age!: number;
 
   @JsonProperty({ type: Address, name: 'AddressArr' })
-  public addressArr: Address[];
+  public addressArr!: Address[];
 
   @JsonProperty({ type: Address, name: 'Address' })
-  public address: Address;
+  public address!: Address;
 
   public constructor(public client?: { ass: string }) {}
 }

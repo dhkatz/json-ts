@@ -3,13 +3,13 @@ import { Student } from './Student';
 
 export class Address {
   @JsonProperty('first-line')
-  public firstLine: string;
+  public firstLine!: string;
 
   @JsonProperty('second-line')
-  public secondLine: string;
+  public secondLine!: string;
 
   @JsonProperty({ type: Student })
-  public student: Student;
+  public student!: Student;
 
-  public city: string;
+  public city!: string;
 }

@@ -1,5 +1,5 @@
 import { IPropertyMetadata } from './PropertyMetadata';
-import { Constructor, isPrimitive, Json, JsonArray, JsonObject } from './util';
+import { Constructor, isConstructor, isPrimitive, Json, JsonArray, JsonObject } from './util';
 import { PropertyMetadataMap } from './index';
 
 /**
@@ -10,10 +10,13 @@ import { PropertyMetadataMap } from './index';
  * @param {Json} json, input json object which to be mapped
  * @return {T} return mapped object
  */
-export function deserialize<T, U extends Json>(type: T | Constructor<T>, json: U): T;
-export function deserialize<T, U extends JsonArray>(type: T | Constructor<T>, json: U): T[];
-export function deserialize<T, U extends JsonObject>(type: T | Constructor<T>, json: U): T;
-export function deserialize<T>(type: T | Constructor<T>, json: JsonObject | JsonArray): T | T[] {
+export function deserialize<T extends object, U extends Json>(type: T | Constructor<T>, json: U): T;
+export function deserialize<T extends object, U extends JsonArray>(type: T | Constructor<T>, json: U): T[];
+export function deserialize<T extends object, U extends JsonObject>(type: T | Constructor<T>, json: U): T;
+export function deserialize<T extends object>(
+  type: T | Constructor<T>,
+  json: JsonObject | JsonArray
+): T | T[] | undefined {
   if (type == undefined || json == undefined) {
     return undefined;
   }
@@ -26,10 +29,10 @@ export function deserialize<T>(type: T | Constructor<T>, json: JsonObject | Json
     return json.map((value: Json) => deserialize(type, value));
   }
 
-  let constructor = type instanceof Function ? type : type.constructor;
-  let instance = type instanceof Function ? new type() : type;
+  let constructor = isConstructor(type) ? type : type.constructor;
+  let instance: any = type instanceof Function ? new type() : type;
 
-  const properties: Map<string, IPropertyMetadata<T>> = PropertyMetadataMap.find(constructor);
+  const properties: Map<string, IPropertyMetadata<T>> = PropertyMetadataMap.find(constructor) || new Map();
 
   for (const [key, metadata] of properties.entries()) {
     if (metadata && metadata.converter) {
@@ -44,7 +47,7 @@ export function deserialize<T>(type: T | Constructor<T>, json: JsonObject | Json
 
 function deserializeProp<T>(metadata: IPropertyMetadata<T>, instance: T, json: Json, key: string): any {
   const index = metadata.name || key;
-  const value: Json = json ? json[index] : undefined;
+  const value = json && typeof json === 'object' && !Array.isArray(json) ? json[index] : undefined;
 
   const type: any = metadata.type || Reflect.getMetadata('design:type', instance, key);
 
@@ -55,7 +58,7 @@ function deserializeProp<T>(metadata: IPropertyMetadata<T>, instance: T, json: J
   if (Array.isArray(type) || type === Array) {
     if ((metadata && metadata.type) || typeof type === 'object') {
       if (value && Array.isArray(value)) {
-        return value.map((item: any) => deserialize(metadata.type, item));
+        return value.map((item: any) => deserialize(metadata.type || type, item));
       }
       return;
     } else {
@@ -73,8 +76,10 @@ function deserializeProp<T>(metadata: IPropertyMetadata<T>, instance: T, json: J
     }
 
     return Boolean(value);
-  } else if (isPrimitive(type) && type instanceof Function) {
+  } else if (value && isPrimitive(type) && type instanceof Function) {
     return type(value);
+  } else if (value && type instanceof Function && isConstructor(type) && !Array.isArray(value)) {
+    return new type(value);
   }
 
   return value;

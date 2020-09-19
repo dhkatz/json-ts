@@ -10,9 +10,7 @@
     "declarationDir": "./typings",
 
     /* Strict Type-Checking Options */
-    "alwaysStrict": true,
-    "noImplicitAny": true,
-    "suppressImplicitAnyIndexErrors": true,
+    "strict": true,
 
     /* Basic Options */
     "importHelpers": true,
@@ -24,7 +22,7 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
 
-    "rootDir": ".",
+    "rootDir": "./src",
     "baseUrl": "."
   },
   "include": [

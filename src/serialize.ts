@@ -12,7 +12,7 @@ export function serialize<T extends object = any, U extends object = any>(instan
     return instance.map((value: T) => serialize(value));
   }
 
-  const obj: U = Object.create(null);
+  const obj: any = Object.create(null);
 
   for (const key of Object.keys(instance)) {
     const metadata = PropertyMetadataMap.find(instance.constructor, key);
@@ -29,7 +29,7 @@ export function serialize<T extends object = any, U extends object = any>(instan
       target = metadata.name;
     }
 
-    obj[target] = serializeProperty(metadata, instance[key]);
+    obj[target] = serializeProperty(metadata, (instance as any)[key]);
   }
 
   return obj;

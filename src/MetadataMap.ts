@@ -32,7 +32,7 @@ export class MetadataMap<T = any> {
       this.metadata.set(key, new Map());
     }
 
-    this.metadata.get(key).set(property, metadata);
+    this.metadata.get(key)?.set(property, metadata);
   }
 
   /**
@@ -53,15 +53,15 @@ export class MetadataMap<T = any> {
         return metadata;
       }
 
-      const parent = this._ancestors(key).find((v) => this.metadata.has(v) && this.metadata.get(v).has(property));
+      const parent = this._ancestors(key).find((v) => this.metadata.has(v) && this.metadata.get(v)!.has(property));
 
-      return this.metadata.get(parent).get(property);
+      return parent ? this.metadata.get(parent)?.get(property) : undefined;
     }
 
     const metadata = new Map<string, IPropertyMetadata<T>>();
 
     if (this.metadata.has(key)) {
-      for (const [prop, data] of this.metadata.get(key).entries()) {
+      for (const [prop, data] of this.metadata.get(key)!.entries()) {
         metadata.set(prop, data);
       }
     }
@@ -69,7 +69,7 @@ export class MetadataMap<T = any> {
     for (const ancestor of this._ancestors(key)) {
       if (!this.metadata.has(ancestor)) continue;
 
-      for (const [prop, data] of this.metadata.get(ancestor).entries()) {
+      for (const [prop, data] of this.metadata.get(ancestor)!.entries()) {
         metadata.set(prop, data);
       }
     }
@@ -92,6 +92,6 @@ export class MetadataMap<T = any> {
       this.ancestors.set(target, ancestors);
     }
 
-    return this.ancestors.get(target);
+    return this.ancestors.get(target)!;
   }
 }
