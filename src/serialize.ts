@@ -1,5 +1,6 @@
 import { IPropertyMetadata } from './PropertyMetadata';
 import { PropertyMetadataMap } from './index';
+import { isPrimitive } from './util';
 
 /**
  * Serialize: Creates a JSON serializable object from the provided object instance.
@@ -10,6 +11,10 @@ export function serialize<T extends object = any, U extends object = any>(instan
 export function serialize<T extends object = any, U extends object = any>(instance: T | T[]): U | U[] {
   if (Array.isArray(instance)) {
     return instance.map((value: T) => serialize(value));
+  }
+
+  if (isPrimitive(instance) || instance instanceof Date) {
+    return serializeProperty({} as any, instance);
   }
 
   const obj: any = Object.create(null);
@@ -51,11 +56,15 @@ function serializeProperty(metadata: IPropertyMetadata<any>, prop: any): any {
     return metadata.converter.toJson(prop);
   }
 
-  if (!metadata.type) {
-    return prop instanceof Date ? new Date(prop.getTime() - prop.getTimezoneOffset() * 60000).toISOString() : prop;
+  if (prop instanceof Date) {
+    return new Date(prop.getTime() - prop.getTimezoneOffset() * 60000).toISOString();
   }
 
-  if (Array.isArray(prop)) {
+  if ((metadata.type && isPrimitive(metadata.type)) || isPrimitive(prop)) {
+    return prop;
+  }
+
+  if (Array.isArray(prop) && metadata.type === Array) {
     return prop.map((item: any) => serialize(item));
   }
 

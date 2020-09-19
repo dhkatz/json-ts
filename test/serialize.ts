@@ -64,7 +64,7 @@ describe('serialize', () => {
     expect(serialized.lastName).toBeUndefined();
   });
 
-  it('should work recursively if clazz is specified in meta data', () => {
+  it('should work recursively if type is specified in meta data', () => {
     class OtherClass {
       @JsonProperty({ name: 'date', converter: DateConverter })
       public date: Date = new Date();
@@ -79,20 +79,16 @@ describe('serialize', () => {
   });
 
   describe('Arrays', () => {
-    it('should keep as is if no clazz is specified', () => {
-      class ClassWithArrayProp {
-        @JsonProperty('items')
-        public items: Date[] = [new Date(), new Date()];
-      }
-      const instance = new ClassWithArrayProp();
-      const serialized = serialize(instance);
-      expect(serialized.items).toBeInstanceOf(Array);
-      expect(serialized.items.length).toEqual(2);
-      expect(serialized.items[0]).toEqual(instance.items[0]);
-      expect(serialized.items[1]).toEqual(instance.items[1]);
+    it('should throw as is if no type is specified for array property', () => {
+      expect(() => {
+        class ClassWithArrayProp {
+          @JsonProperty('items')
+          public items: Date[] = [new Date(), new Date()];
+        }
+      }).toThrow(TypeError);
     });
 
-    it('should apply serialize for all array items if clazz is specified', () => {
+    it('should apply serialize for all array items if type is specified', () => {
       class OtherClass {
         @JsonProperty({ name: 'date', converter: DateConverter })
         public date: Date = new Date();

@@ -1,4 +1,4 @@
-import { deserialize } from '../src';
+import { deserialize, JsonProperty } from '../src';
 import { Student } from './common/Student';
 import { Person } from './common/Person';
 import { Address } from './common/Address';
@@ -77,6 +77,7 @@ describe('index()', () => {
     expect(typeof person.name).toBe('string');
     expect(person.address).toBeInstanceOf(Address);
     expect(person.addressArr.length).toEqual(2);
+    expect(person.addressArr[0]).toBeInstanceOf(Address);
     expect(person.address.student.fullName).toEqual('Ailun');
   });
 
@@ -152,5 +153,17 @@ describe('index()', () => {
     const cat = deserialize(Cat, json);
     expect(cat.coat).toEqual(1);
     expect(cat.meow()).toEqual('Meow!');
+  });
+
+  it('deserializes property with no options passed', () => {
+    class Test {
+      @JsonProperty()
+      public value!: string;
+    }
+
+    const json = { value: 'test' };
+
+    const test = deserialize(Test, json);
+    expect(test.value).toEqual('test');
   });
 });

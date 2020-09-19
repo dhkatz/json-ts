@@ -15,6 +15,7 @@ export function JsonProperty<T>(metadata?: IPropertyMetadata<T> | string): (targ
       decorator = new PropertyMetadata(metadata);
       break;
     case 'object':
+    case 'undefined':
       decorator = metadata as IPropertyMetadata<T>;
       break;
     default:
@@ -23,6 +24,16 @@ export function JsonProperty<T>(metadata?: IPropertyMetadata<T> | string): (targ
 
   return (target: any, propertyKey: string) => {
     const object = target instanceof Function ? target : target.constructor;
+
+    if (decorator === undefined) decorator = { name: propertyKey };
+
+    if (decorator.type === undefined) {
+      decorator.type = Reflect.getMetadata('design:type', target, propertyKey);
+    }
+
+    if ((decorator as any).type === Array) {
+      throw new TypeError('Metadata for JsonProperty must include a type for array properties!');
+    }
 
     PropertyMetadataMap.set(object, propertyKey, decorator);
   };

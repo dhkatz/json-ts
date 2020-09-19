@@ -41,7 +41,7 @@ class Address {
     @JsonProperty('second-line')
     public secondLine: string;
 
-    @JsonProperty({clazz: Student})
+    @JsonProperty()
     public student: Student;
 
     public city: string;
@@ -59,8 +59,8 @@ class Person {
     @JsonProperty({ type: Address, name: 'AddressArr' })
     public addressArr:Address[];
 
-    @JsonProperty({ type: Address, name: 'Address' })
-    public address:Address;
+    @JsonProperty({ name: 'Address' })
+    public address: Address;
 }
 ```
 
@@ -98,7 +98,7 @@ const json = {
 };
 ```
 
-Simply, just map it use following code. The mapping is based on <@JsonProperty> decorator meta data.
+Simply, just map it use following code. The mapping is based on `@JsonProperty` decorator meta data.
 
 ```typescript
 import { deserialize } from '@dhkatz/json-ts';

@@ -51,35 +51,34 @@ function deserializeProp<T>(metadata: IPropertyMetadata<T>, instance: T, json: J
 
   const type: any = metadata.type || Reflect.getMetadata('design:type', instance, key);
 
-  if (type == undefined) {
-    return value;
+  if (type === undefined) {
+    throw new TypeError('Tried to deserialize a property with an undefined type!');
   }
 
-  if (Array.isArray(type) || type === Array) {
-    if ((metadata && metadata.type) || typeof type === 'object') {
-      if (value && Array.isArray(value)) {
-        return value.map((item: any) => deserialize(metadata.type || type, item));
+  if (type === Array) {
+    throw new TypeError(
+      "Tried to deserialize property of 'Array' type! Insufficient type information available for arrays!"
+    );
+  }
+
+  if (!Array.isArray(value)) {
+    if (!isPrimitive(type) && typeof value === 'object') {
+      return deserialize(type, value);
+    }
+
+    if (isPrimitive(type) && isPrimitive(value)) {
+      if (type === Boolean) {
+        return value == undefined ? value : Boolean(value);
+      } else if (value && type instanceof Function) {
+        return type(value);
       }
-      return;
-    } else {
-      return value;
-    }
-  }
-
-  if (!isPrimitive(type) && typeof value === 'object' && !Array.isArray(value)) {
-    return deserialize(type, value);
-  }
-
-  if (type === Boolean) {
-    if (value === undefined) {
-      return undefined;
     }
 
-    return Boolean(value);
-  } else if (value && isPrimitive(type) && type instanceof Function) {
-    return type(value);
-  } else if (value && type instanceof Function && isConstructor(type) && !Array.isArray(value)) {
-    return new type(value);
+    if (value !== undefined && type instanceof Function && isConstructor(type)) {
+      return new type(value);
+    }
+  } else {
+    return value.map((v) => deserialize(type, v));
   }
 
   return value;
