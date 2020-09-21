@@ -1,6 +1,6 @@
 # json-ts
 
-[![Build Status](https://travis-ci.com/dhkatz/json-ts.svg?branch=master)](https://travis-ci.com/dhkatz/json-ts) ![npm (scoped)](https://img.shields.io/npm/v/@dhkatz/json-ts) ![npm](https://img.shields.io/npm/dt/@dhkatz/json-ts)
+[![Build Status](https://travis-ci.com/dhkatz/json-ts.svg?branch=master)](https://travis-ci.com/dhkatz/json-ts) [![Coverage Status](https://coveralls.io/repos/github/dhkatz/json-ts/badge.svg?branch=master)](https://coveralls.io/github/dhkatz/json-ts?branch=master) ![npm (scoped)](https://img.shields.io/npm/v/@dhkatz/json-ts) ![npm](https://img.shields.io/npm/dt/@dhkatz/json-ts)
  
 (De)serialize between JSON and JavaScript objects using the decorators design proposal.
 
