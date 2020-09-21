@@ -35,10 +35,10 @@ export function deserialize<T extends object>(
   const properties: Map<string, IPropertyMetadata<T>> = PropertyMetadataMap.find(constructor) || new Map();
 
   for (const [key, metadata] of properties.entries()) {
-    if (metadata && metadata.converter) {
+    if (metadata.converter) {
       instance[key] = metadata.converter.fromJson(json[metadata.name || key]);
     } else {
-      instance[key] = metadata ? deserializeProp(metadata, instance, json, key) : json[key] || instance[key];
+      instance[key] = deserializeProp(metadata, instance, json, key); // || json[key] || instance[key];
     }
   }
 

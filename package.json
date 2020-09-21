@@ -1,6 +1,6 @@
 {
   "name": "@dhkatz/json-ts",
-  "version": "4.4.0",
+  "version": "4.4.1",
   "description": "Transform JSON objects into TypeScript classes.",
   "keywords": [
     "json-mapper",
@@ -38,6 +38,7 @@
     "@types/jest": "^26.0.14",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
+    "coveralls": "^3.1.0",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^6.11.0",
     "jest": "^26.4.2",
@@ -46,10 +47,9 @@
   },
   "scripts": {
     "test": "jest --verbose=false",
+    "coverage": "jest --coverage && coveralls < coverage/lcov.info",
     "lint": "eslint src/**/* && tsc --noEmit",
-    "build": "npm run build:types && npm run build:js",
-    "build:types": "tsc --emitDeclarationOnly",
-    "build:js": "tsc",
+    "build": "tsc",
     "prepublish": "npm run build"
   },
   "prettier": {
